@@ -24,7 +24,7 @@ const statusOptions: CheckboxGroupProps<string>['options'] = [
 const categoryOptions: CheckboxGroupProps<string>['options'] = (
     // Неохота мне все опции расписывать, да и расширяемость в голове держать полезно,
     // поэтому здесь мы будет получать их и парсить их из файла с типами напрямую:
-    category.map((c, i) => ( { label: c, value: c } ))
+    category.map((c) => ( { label: c, value: c } ))
 )
 
 type Props = {

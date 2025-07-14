@@ -4,9 +4,9 @@ export const category = ["Bug", "Feature", "Documentation", "Refactor", "Test"]
 export const status = ["To Do", "In Progress", "Done"]
 export const priority = ["Low", "Medium", "High"]
 
-export type Category = typeof category
-export type Status = typeof status
-export type Priority = typeof priority
+export type Category = typeof category[number]
+export type Status = typeof status[number]
+export type Priority = typeof priority[number]
 
 export interface Task {
     key: number,

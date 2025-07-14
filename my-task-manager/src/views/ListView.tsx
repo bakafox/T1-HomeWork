@@ -13,14 +13,14 @@ type Props = {
     // setTasks: (t: Task[]) => void
 }
 
+type FilterBy = 'category' | 'status' | 'priority'
+
 const ListView: React.FC<Props> = (props) => {
     const { getTasks } = props
 
     // Пусть у нас таски сортируются либо по категориям,
     // либо по статусу выполнения, либо по приоритету:
-    const [getSortTasksBy, setSortTasksBy] = useState<
-        'category' | 'status' | 'priority'
-    >('status')
+    const [getSortTasksBy, setSortTasksBy] = useState<FilterBy>('status')
 
     // const sortedTasks = (
     //     (getSortTasksBy === 'status') ? [...getTasks].sort((t1, t2) => {
@@ -68,7 +68,7 @@ const ListView: React.FC<Props> = (props) => {
 
                 <div className={styles['sortby-controls']}>
                     <Typography.Text>Фильтровать по: </Typography.Text>
-                    <Segmented value={getSortTasksBy} onChange={(v) => setSortTasksBy(v)}
+                    <Segmented value={getSortTasksBy} onChange={(v: FilterBy) => setSortTasksBy(v)}
                         options={[
                             { label: 'Статусу', value: 'status', icon: <BarsOutlined /> },
                             { label: 'Важности', value: 'priority', icon: <ExclamationCircleOutlined /> },
@@ -88,7 +88,7 @@ const ListView: React.FC<Props> = (props) => {
                 {/* В идеале эту логику вынести в отдельный компонент, но */}
                 {/* по ТЗ нам можно использовать только 3 данных компонента */}
                 {/* (аналогично с реализацией пикера типа фильтрации задач) */}
-                {tasksByCat.map((c, i) => {
+                {tasksByCat.map((c) => {
                     if (c.tasks.length > 0) {
                         return <TaskList listName={c.name} getTasks={c.tasks} key={c.name} />
                     }
