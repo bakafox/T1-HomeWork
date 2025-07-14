@@ -1,0 +1,14 @@
+main {
+    margin: 0 20px;
+}
+
+header {
+    display: flex; flex-direction: row;
+    justify-content: space-between; align-items: center;
+    margin: 0 20px;
+}
+
+.sortby-controls {
+    display: flex; flex-direction: column;
+    text-align: center;
+}

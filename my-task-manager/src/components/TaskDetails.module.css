@@ -1,0 +1,84 @@
+.taskdetails {
+    max-width: 640px;
+    margin: 0 auto 20px;
+}
+
+.taskdetails-inner {
+    display: flex; flex-direction: column;
+    gap: 12px;
+}
+.taskdetails-inner__seg {
+    display: flex; flex-direction: column;
+
+    & label {
+        height: auto;
+    }
+}
+.taskdetails-footer {
+    display: flex;
+    justify-content: end;
+    margin: 0 12px; gap: 12px;
+    cursor: default;
+}
+
+.option-high {
+    &:hover {
+        color: #d4380d !important;
+    }
+    &[class~=ant-radio-button-wrapper-checked] {
+        background-color: #fa541c !important;
+        color: white !important;
+        border-color: #fa541c !important;
+    }
+}
+.option-medium {
+    &:hover {
+        color: #d4b106 !important;
+    }
+    &[class~=ant-radio-button-wrapper-checked] {
+        background-color: #fadb14 !important;
+        color: white !important;
+        border-color: #fadb14 !important;
+    }
+}
+.option-low {
+    &:hover {
+        color: #b37feb !important;
+    }
+    &[class~=ant-radio-button-wrapper-checked] {
+        background-color: #d3adf7 !important;
+        color: white !important;
+        border-color: #d3adf7 !important;
+    }
+}
+
+.option-todo {
+    &:hover {
+        color: #c41d7f !important;
+    }
+    &[class~=ant-radio-button-wrapper-checked] {
+        background-color: #fff0f6 !important;
+        color: #c41d7f !important;
+        border-color: #ffadd2 !important;
+    }
+}
+.option-progress {
+    &:hover {
+        color: #d48806 !important;
+    }
+    &[class~=ant-radio-button-wrapper-checked] {
+        background-color: #fffbe6 !important;
+        color: #d48806 !important;
+        border-color: #ffe58f !important;
+    }
+}
+.option-done {
+    &:hover {
+        color: #389e0d !important;
+    }
+    &[class~=ant-radio-button-wrapper-checked] {
+        background-color: #f6ffed !important;
+        color: #389e0d !important;
+        border-color: #b7eb8f !important;
+    }
+}

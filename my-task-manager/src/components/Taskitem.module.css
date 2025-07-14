@@ -1,0 +1,28 @@
+.taskitem {
+    border-left-width: 4px;
+
+    &.high {
+        border-left-color: #fa541c;
+    }
+    &.medium {
+        border-left-color: #ffec3d;
+    }
+    &.low {
+        border-left-color: #d3adf7;
+    }
+}
+
+.taskitem-text {
+    margin: 0 0 8px;
+
+    &.empty {
+        display: none;
+    }
+}
+
+.taskitem-edit {
+    appearance: none;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}

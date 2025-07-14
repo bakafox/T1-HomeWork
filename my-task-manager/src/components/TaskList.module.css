@@ -1,0 +1,16 @@
+.tasklist {
+    display: flex; flex-direction: column;
+    gap: 12px;
+    max-width: 640px;
+    margin: 0 auto 20px;
+}
+
+.divider {
+    margin-bottom: 0 !important;
+}
+.divider > [class~=ant-divider-inner-text] > * {
+    margin: 0;
+}
+.divider:after {
+    background-color: #999;
+}
