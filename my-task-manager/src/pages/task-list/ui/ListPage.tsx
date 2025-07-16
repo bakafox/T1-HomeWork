@@ -3,7 +3,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { category, status, priority } from '@entities/Task/model/types'
 import { useNavigate } from "react-router";
-import type { Task } from '.@entities/Task/model/types'
+import type { Task } from '@entities/Task/model/types'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { createTask } from '@entities/Task/model/tasksSlice'
