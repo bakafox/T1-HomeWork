@@ -1,8 +1,8 @@
 import styles from './TaskForm.module.css'
 import React from 'react'
-import { category } from '../types/types'
+import { category } from '@entities/Task/model/types'
 import type { CheckboxGroupProps } from 'antd/es/checkbox'
-import type { Task } from '../types/types'
+import type { Task } from '@entities/Task/model/types'
 
 import { Card, Form, Input, Typography, Button, Radio } from 'antd'
 import {

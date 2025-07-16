@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
-import type { Task } from '../types/types'
+import type { Task } from '@entities/Task/model/types'
 
 interface TasksState {
     value: Task[]
@@ -19,7 +19,12 @@ const tasksSlice = createSlice({
         ) {
             console.log(state, action)
 
-            const newTaskId = state.value.length
+            if (!action.payload.newTask.title) return
+
+            const newTaskId = (state.value.length > 0)
+            ? state.value[state.value.length-1].key + 1
+            : 0
+
             state.value.push({
                 ...action.payload.newTask,
                 key: newTaskId

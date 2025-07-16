@@ -1,12 +1,16 @@
-main {
+.tasklists {
     width: 100%; max-width: 640px;
-    margin: 0 auto 20px;
+    margin: 0 auto 40px;
 }
 
-header {
+.header {
     display: flex; flex-direction: row;
     justify-content: space-between; align-items: center;
     margin: 0 20px;
+
+    @media (width < 640px) {
+        flex-direction: column;
+    }
 }
 
 .sortby-controls {

@@ -1,6 +1,6 @@
-import styles from './Taskitem.module.css'
+import styles from './TaskItem.module.css'
 import React, { type ReactNode } from 'react'
-import type { Task } from '../types/types'
+import type { Task } from '@entities/Task/model/types'
 
 import { Card, Tag, Typography, Button } from 'antd'
 import {

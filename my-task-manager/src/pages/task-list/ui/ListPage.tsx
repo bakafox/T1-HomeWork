@@ -1,17 +1,17 @@
 import styles from './ListPage.module.css'
 import React from 'react'
 import { useState, useEffect } from 'react'
-import { category, status, priority } from '../types/types'
+import { category, status, priority } from '@entities/Task/model/types'
 import { useNavigate } from "react-router";
-import type { Task } from '../types/types'
+import type { Task } from '.@entities/Task/model/types'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { createTask } from '../store/tasksSlice'
-import type { RootState } from '../store'
+import { createTask } from '@entities/Task/model/tasksSlice'
+import type { RootState } from '@app/store'
 
 import { Typography, Divider, Segmented, Button } from 'antd'
 import { AppstoreOutlined, BarsOutlined, ExclamationCircleOutlined, PlusCircleOutlined } from '@ant-design/icons'
-import TaskList from '../components/TaskList'
+import TaskList from '@features/task-list/ui/TaskList'
 
 type FilterBy = 'category' | 'status' | 'priority'
 
@@ -132,7 +132,7 @@ const ListPage: React.FC = () => {
 
     return (
         <>
-            <header>
+            <header className={styles.header}>
                 <Typography.Title level={2}><i>Менеджер задач!</i></Typography.Title>
 
                 <div className={styles['sortby-controls']}>
@@ -152,7 +152,7 @@ const ListPage: React.FC = () => {
                 <Typography.Text strong>Всего задач: {tasks.length}</Typography.Text>
             </Divider>
 
-            <main>
+            <main className={styles.tasklists}>
                 <Button type="dashed" className={styles['add-btn']} onClick={() => navigate('/task/new')}>
                     <PlusCircleOutlined /> Новая задача
                 </Button>

@@ -1,16 +1,16 @@
-import styles from './TaskPages.module.css'
+import styles from './EditPage.module.css'
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from "react-router"
-import type { Task } from '../types/types'
+import type { Task } from '@entities/Task/model/types'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { updateTask } from '../store/tasksSlice'
-import type { RootState } from '../store'
+import { updateTask } from '@entities/Task/model/tasksSlice'
+import type { RootState } from '@app/store'
 
 import { Typography } from 'antd'
 import { ExclamationCircleOutlined, CheckCircleOutlined } from '@ant-design/icons'
-import TaskForm from '../components/TaskForm'
+import TaskForm from '@widgets/task-form/ui/TaskForm'
 
 const TaskEditPage: React.FC = () => {
     const params = useParams()
@@ -49,7 +49,7 @@ const TaskEditPage: React.FC = () => {
 
     return (
         <>
-            <header>
+            <header className={styles.header}>
                 <Typography.Title level={2}><i>Редактирование задачи</i></Typography.Title>
             </header>
 

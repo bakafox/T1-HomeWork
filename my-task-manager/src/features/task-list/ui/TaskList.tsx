@@ -1,12 +1,12 @@
 import styles from './TaskList.module.css'
 import React from 'react'
 import { useNavigate } from "react-router"
-import type { Task } from '../types/types'
+import type { Task } from '@entities/Task/model/types'
 
 import { useDispatch } from 'react-redux'
-import { deleteTask } from '../store/tasksSlice'
+import { deleteTask } from '@entities/Task/model/tasksSlice'
 
-import TaskItem from './TaskItem'
+import TaskItem from '@entities/Task/ui/TaskItem'
 import { Typography, Divider } from 'antd'
 
 
@@ -24,7 +24,7 @@ const TaskList: React.FC<Props> = (props) => {
     return (
         <div className={styles.tasklist}>
             <Divider orientation="left" orientationMargin="0" className={styles.divider}>
-                <Typography.Title level={4}>{`${listName}: ${tasks.length} задач`}</Typography.Title>
+                <Typography.Title level={4}>{`${listName}: ${tasks.length} зад.`}</Typography.Title>
             </Divider>
             
             {tasks.map((t) => (
