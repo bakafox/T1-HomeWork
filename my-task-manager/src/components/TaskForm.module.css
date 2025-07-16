@@ -1,52 +1,52 @@
-.taskdetails {
-    max-width: 640px;
+.taskform {
+    width: 100%; max-width: 640px;
     margin: 0 auto 20px;
 }
 
-.taskdetails-inner {
+.taskform-inner {
     display: flex; flex-direction: column;
     gap: 12px;
 }
-.taskdetails-inner__seg {
-    display: flex; flex-direction: column;
-
-    & label {
-        height: auto;
-    }
+[class~=ant-form-item] {
+    margin-inline: 0 !important;
 }
-.taskdetails-footer {
+[class~=ant-radio-group-block] label {
+    height: auto;
+}
+
+.taskform-footer [class~=ant-form-item-control-input-content] {
     display: flex;
     justify-content: end;
-    margin: 0 12px; gap: 12px;
+    margin: 0 12px; gap: 8px;
     cursor: default;
 }
 
 .option-high {
     &:hover {
-        color: #d4380d !important;
+        color: #d4380d;
     }
     &[class~=ant-radio-button-wrapper-checked] {
-        background-color: #fa541c !important;
+        background-color: #fa541c;
         color: white !important;
         border-color: #fa541c !important;
     }
 }
 .option-medium {
     &:hover {
-        color: #d4b106 !important;
+        color: #d4b106;
     }
     &[class~=ant-radio-button-wrapper-checked] {
-        background-color: #fadb14 !important;
+        background-color: #fadb14;
         color: white !important;
         border-color: #fadb14 !important;
     }
 }
 .option-low {
     &:hover {
-        color: #b37feb !important;
+        color: #b37feb;
     }
     &[class~=ant-radio-button-wrapper-checked] {
-        background-color: #d3adf7 !important;
+        background-color: #d3adf7;
         color: white !important;
         border-color: #d3adf7 !important;
     }
@@ -54,30 +54,30 @@
 
 .option-todo {
     &:hover {
-        color: #c41d7f !important;
+        color: #c41d7f;
     }
     &[class~=ant-radio-button-wrapper-checked] {
-        background-color: #fff0f6 !important;
+        background-color: #fff0f6;
         color: #c41d7f !important;
         border-color: #ffadd2 !important;
     }
 }
 .option-progress {
     &:hover {
-        color: #d48806 !important;
+        color: #d48806;
     }
     &[class~=ant-radio-button-wrapper-checked] {
-        background-color: #fffbe6 !important;
+        background-color: #fffbe6;
         color: #d48806 !important;
         border-color: #ffe58f !important;
     }
 }
 .option-done {
     &:hover {
-        color: #389e0d !important;
+        color: #389e0d;
     }
     &[class~=ant-radio-button-wrapper-checked] {
-        background-color: #f6ffed !important;
+        background-color: #f6ffed;
         color: #389e0d !important;
         border-color: #b7eb8f !important;
     }

@@ -3,30 +3,36 @@ import React from 'react'
 import { useNavigate } from "react-router"
 import type { Task } from '../types/types'
 
+import { useDispatch } from 'react-redux'
+import { deleteTask } from '../store/tasksSlice'
+
 import TaskItem from './TaskItem'
 import { Typography, Divider } from 'antd'
 
 
 type Props = {
     listName: string,
-    getTasks: Task[]
-    // setTasks: (t: Task[]) => void
+    tasks: Task[]
 }
 
 const TaskList: React.FC<Props> = (props) => {
-    const { listName, getTasks } = props
+    const { listName, tasks } = props
     
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     return (
         <div className={styles.tasklist}>
             <Divider orientation="left" orientationMargin="0" className={styles.divider}>
-                <Typography.Title level={4}>{`${listName}: ${getTasks.length} задач`}</Typography.Title>
+                <Typography.Title level={4}>{`${listName}: ${tasks.length} задач`}</Typography.Title>
             </Divider>
             
-            {getTasks.map((t) => (
-                <TaskItem onClicked={() => navigate(`/task/${t.key}`)} task={t} key={t.key} />
-            ))}
+            {tasks.map((t) => (
+                <TaskItem task={t} key={t.key}
+                    onEdit={() => navigate(`/task/${t.key}`)}
+                    onDelete={() => dispatch(deleteTask({ taskId: t.key }))}
+                />
+            )).reverse() /* <-- Чтобы самые новые задачи были наверху */}
         </div>
     )
 }

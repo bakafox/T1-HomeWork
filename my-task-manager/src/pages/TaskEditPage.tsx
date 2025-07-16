@@ -1,37 +1,36 @@
-import styles from './TaskView.module.css'
+import styles from './TaskPages.module.css'
 import React from 'react'
 import { useState, useEffect } from 'react'
+import { useParams, useNavigate } from "react-router"
 import type { Task } from '../types/types'
-import { useParams, useNavigate } from "react-router";
+
+import { useDispatch, useSelector } from 'react-redux'
+import { updateTask } from '../store/tasksSlice'
 
 import { Typography } from 'antd'
 import { ExclamationCircleOutlined, CheckCircleOutlined } from '@ant-design/icons'
-import TaskDetails from '../components/TaskDetails'
+import TaskForm from '../components/TaskForm'
 
-type Props = {
-    getTasks: Task[],
-    setTasks: (t: Task[]) => void
-}
-
-const TaskView: React.FC<Props> = (props) => {
-    const { getTasks, setTasks } = props
-
+const TaskEditPage: React.FC = () => {
     const params = useParams()
-    const taskId = +(params?.id || -1)
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const tasks = useSelector(
+        state => state.tasks.value
+    )
+    const taskId = +(params?.id || -1)
 
     const [getTaskNotFound, setTaskNotFound] = useState<boolean>(false)
     const [getTaskSaved, setTaskSaved] = useState<boolean>(false)
 
-    const [getCurrTask, setCurrTask] = useState<Task>((): Task => {
-        const currTask = getTasks.filter((t) => t.key === taskId)
-        console.log(currTask)
+    const [getNewTask, setNewTask] = useState<Task>((): Task => {
+        const currTask = tasks.filter((t: Task) => t.key === taskId)
 
         if (currTask.length <= 0) {
             setTaskNotFound(true)
-
             // Просто чтобы не было ошибки, все равно её юзер не увидит
-            return getTasks[0]
+            return tasks[0]
         }
         return currTask[0]
     })
@@ -41,9 +40,10 @@ const TaskView: React.FC<Props> = (props) => {
     }, [getTaskNotFound])
 
     useEffect(() => {
-        setTasks(getTasks.map(t => t.key === getCurrTask.key ? getCurrTask : t))
-        console.log(getCurrTask)
-        if (getTaskSaved) navigate('/')
+        if (getTaskSaved) {
+            dispatch(updateTask({ taskId: taskId, newTask: getNewTask }))
+            navigate('/')
+        }
     }, [getTaskSaved])    
 
     return (
@@ -52,9 +52,9 @@ const TaskView: React.FC<Props> = (props) => {
                 <Typography.Title level={2}><i>Редактирование задачи</i></Typography.Title>
             </header>
 
-            {/* Почему в React нет v-if v-else как во Vue? Неудобно */}
+            {/* Почему в React нет v-if v-else как во Vue? Неудобно >_< */}
             <main className={(getTaskNotFound || getTaskSaved) ? styles.hidden : ''}>
-                <TaskDetails getTask={getCurrTask} setTask={setCurrTask} setFinished={setTaskSaved} />
+                <TaskForm getTask={getNewTask} setTask={setNewTask} setFinished={setTaskSaved} />
             </main>
 
             <main className={getTaskNotFound ? '' : styles.hidden}>
@@ -72,4 +72,4 @@ const TaskView: React.FC<Props> = (props) => {
     )
 }
 
-export default TaskView
+export default TaskEditPage

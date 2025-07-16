@@ -20,9 +20,17 @@
     }
 }
 
-.taskitem-edit {
-    appearance: none;
-    background: transparent;
-    border: none;
-    cursor: pointer;
+.taskitem-footer {
+    display: flex;
+    justify-content: space-between; align-items: baseline;
+}
+.taskitem-footer__actions {
+    display: flex; gap: 8px;
+    opacity: 0;
+    transition: opacity .3s;    
+
+    .taskitem:hover &,
+    &:focus-within {
+        opacity: 1;
+    }
 }

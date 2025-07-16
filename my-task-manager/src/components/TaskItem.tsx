@@ -2,8 +2,11 @@ import styles from './Taskitem.module.css'
 import React, { type ReactNode } from 'react'
 import type { Task } from '../types/types'
 
-import { Card, Tag, Typography } from 'antd'
-import { ExclamationCircleOutlined, SyncOutlined, CheckCircleOutlined, EditOutlined } from '@ant-design/icons';
+import { Card, Tag, Typography, Button } from 'antd'
+import {
+    ExclamationCircleOutlined, SyncOutlined, CheckCircleOutlined,
+    EditOutlined, DeleteOutlined
+} from '@ant-design/icons'
 
 const getStatusData = (status: string): { name: ReactNode, color: string } => {
     switch (status) {
@@ -32,11 +35,12 @@ const getStatusData = (status: string): { name: ReactNode, color: string } => {
 
 type Props = {
     task: Task,
-    onClicked: () => void
+    onEdit: () => void,
+    onDelete: () => void
 }
 
 const TaskItem: React.FC<Props> = (props) => {
-    const { task, onClicked } = props
+    const { task, onEdit, onDelete } = props
     const statusData = getStatusData(task.status)
 
     return (
@@ -50,11 +54,9 @@ const TaskItem: React.FC<Props> = (props) => {
                 <Tag color={statusData.color}>{statusData.name}</Tag> {task.title}
             </>}
             extra={
-                <button className={styles['taskitem-edit']} title='Изменить' aria-label='Кнопка изменения задачи'>
-                    <EditOutlined />
-                </button>
+                <Typography.Text type='secondary'>#{task.key}</Typography.Text>
             }
-            onClick={onClicked} size='small' hoverable={true}
+            size='small' hoverable={true} onClick={onEdit}
         >
             <p className={`
                 ${styles['taskitem-text']}
@@ -63,8 +65,22 @@ const TaskItem: React.FC<Props> = (props) => {
                 <Typography.Text>{task.description}</Typography.Text>
             </p>
 
-            <Typography.Text type='secondary'>Категория: </Typography.Text>
-            <Tag>{task.category}</Tag>
+            <footer className={styles['taskitem-footer']}>
+                <span>
+                    <Typography.Text type='secondary'>Категория: </Typography.Text>
+                    <Tag>{task.category}</Tag>
+                </span>
+                <span className={styles['taskitem-footer__actions']}>
+                    <Button shape="round" icon={<EditOutlined />}
+                        onClick={(e) => { e.stopPropagation(); onEdit() }}
+                        title='Изменить' aria-label='Кнопка изменения задачи'
+                    >Изменить</Button>
+                    <Button danger shape="circle" icon={<DeleteOutlined />}
+                        onClick={(e) => { e.stopPropagation(); onDelete() }}
+                        title='Удалить' aria-label='Кнопка удаления задачи'
+                    ></Button>
+                </span>
+            </footer>
         </Card>
     )
 }
