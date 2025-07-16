@@ -6,6 +6,7 @@ import type { Task } from '../types/types'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { updateTask } from '../store/tasksSlice'
+import type { RootState } from '../store'
 
 import { Typography } from 'antd'
 import { ExclamationCircleOutlined, CheckCircleOutlined } from '@ant-design/icons'
@@ -17,7 +18,7 @@ const TaskEditPage: React.FC = () => {
     const dispatch = useDispatch()
 
     const tasks = useSelector(
-        state => state.tasks.value
+        (state: RootState) => state.tasks.value
     )
     const taskId = +(params?.id || -1)
 

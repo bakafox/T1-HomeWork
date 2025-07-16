@@ -7,6 +7,7 @@ import type { Task } from '../types/types'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { createTask } from '../store/tasksSlice'
+import type { RootState } from '../store'
 
 import { Typography, Divider, Segmented, Button } from 'antd'
 import { AppstoreOutlined, BarsOutlined, ExclamationCircleOutlined, PlusCircleOutlined } from '@ant-design/icons'
@@ -16,7 +17,7 @@ type FilterBy = 'category' | 'status' | 'priority'
 
 const ListPage: React.FC = () => {
     const tasks = useSelector(
-        state => state.tasks.value
+        (state: RootState) => state.tasks.value
     )
 
     const navigate = useNavigate()
@@ -24,15 +25,18 @@ const ListPage: React.FC = () => {
 
     // Пусть у нас таски сортируются либо по категориям,
     // либо по статусу выполнения, либо по приоритету:
-    const [getSortTasksBy, setSortTasksBy] = useState<FilterBy>('status')
+    const [getFilterBy, setFilterBy] = useState<FilterBy>(() => {
+        const lsFilterByJson: string | null = localStorage.getItem("myFilterBy")
+        return lsFilterByJson ? JSON.parse(lsFilterByJson) : 'status'
+    })
 
     // const sortedTasks = (
-    //     (getSortTasksBy === 'status') ? [...tasks].sort((t1, t2) => {
+    //     (getFilterBy === 'status') ? [...tasks].sort((t1, t2) => {
     //         if (t1.status === 'Done' || t2.status === 'To Do') return 1
     //         if (t2.status === 'Done' || t1.status === 'To Do') return -1
     //         return 0
     //     })
-    //     : (getSortTasksBy === 'priority') ? [...tasks].sort((t1, t2) => {
+    //     : (getFilterBy === 'priority') ? [...tasks].sort((t1, t2) => {
     //         if (t1.priority === t2.priority) return 0
     //         if (t1.priority === 'High' || t2.priority === 'Low') return -1
     //         if (t2.priority === 'High' || t1.priority === 'Low') return 1
@@ -44,13 +48,13 @@ const ListPage: React.FC = () => {
     // )
 
     const tasksByCat = (
-        (getSortTasksBy === 'status') ? status.map((s) => {
+        (getFilterBy === 'status') ? status.map((s) => {
             return {
                 name: s,
                 tasks: tasks.filter((t: Task) => t.status === s)
             }
         })
-        : (getSortTasksBy === 'priority') ? [...priority].reverse().map((p) => {
+        : (getFilterBy === 'priority') ? [...priority].reverse().map((p) => {
             return {
                 name: p,
                 tasks: tasks.filter((t: Task) => t.priority === p)
@@ -67,61 +71,64 @@ const ListPage: React.FC = () => {
 
     // Не самое элегантное решение, но... работает жи...
     useEffect(() => {
-        if (tasks.length > 0) return
-
-        let lsTasks: Task[]
-        const lsTasksJson: string | null = localStorage.getItem("myTasks")
-        lsTasks = lsTasksJson ? JSON.parse(lsTasksJson)
-        : [
-            {
-                key: 1, title: 'Реализовать редактирование заданий',
-                category: 'Feature', status: 'Done', priority: 'High'
-            },
-            {
-                key: 2, title: 'Удалить неприличные выражения в комментариях к коду',
-                description: 'Маты это плохо!!! (хотя конкретно в этом коде их и не было)',
-                category: 'Refactor', status: 'In Progress', priority: 'Low'
-            },
-            {
-                key: 0, title: 'Реализовать тёмную тему (nuff said)',
-                category: 'Feature', status: 'To Do', priority: 'Medium'
-            },
-            {
-                key: 3, title: 'Возможность добавлять новые категории к задачам',
-                category: 'Feature', status: 'Done', priority: 'Medium'
-            },
-            {
-                key: 4, title: 'Возможность удаления и добавления заданий',
-                description: 'Оказалось, что не все клиенты довольны тем, что для добавления '
-                + 'нового задания нужно лезть в исходный код фронта. Надо что-то предпринять!',
-                category: 'Feature', status: 'To Do', priority: 'High'
-            },
-            {
-                key: 5, title: 'Протестировать на умной микроволновке в состоянии нагрузки',
-                category: 'Test', status: 'In Progress', priority: 'Medium'
-            },
-            {
-                key: 6, title: 'Написать README.MD к этой задаче',
-                category: 'Documentation', status: 'Done', priority: 'Low'
-            },
-            {
-                key: 7, title: 'Добавить возможность удаления и создания заданий',
-                category: 'Feature', status: 'Done', priority: 'High'
-            },
-            {
-                key: 8, title: 'Перестроить архитектуру в соответствие с FSD',
-                category: 'Feature', status: 'In Progress', priority: 'High'
-            },
-        ]
-        
-        lsTasks.forEach((t: Task) => {
-            dispatch(createTask({ newTask: t }))
-        })
+        if (tasks.length <= 0) {
+            const lsTasksJson: string | null = localStorage.getItem("myTasks")
+            const lsTasks: Task[] = lsTasksJson ? JSON.parse(lsTasksJson)
+            : [
+                {
+                    key: 1, title: 'Реализовать редактирование заданий',
+                    category: 'Feature', status: 'Done', priority: 'High'
+                },
+                {
+                    key: 2, title: 'Удалить неприличные выражения в комментариях к коду',
+                    description: 'Маты это плохо!!! (хотя конкретно в этом коде их и не было)',
+                    category: 'Refactor', status: 'In Progress', priority: 'Low'
+                },
+                {
+                    key: 0, title: 'Реализовать тёмную тему (nuff said)',
+                    category: 'Feature', status: 'To Do', priority: 'Medium'
+                },
+                {
+                    key: 3, title: 'Возможность добавлять новые категории к задачам',
+                    category: 'Feature', status: 'Done', priority: 'Medium'
+                },
+                {
+                    key: 4, title: 'Возможность удаления и добавления заданий',
+                    description: 'Оказалось, что не все клиенты довольны тем, что для добавления '
+                    + 'нового задания нужно лезть в исходный код фронта. Надо что-то предпринять!',
+                    category: 'Feature', status: 'To Do', priority: 'High'
+                },
+                {
+                    key: 5, title: 'Протестировать на умной микроволновке в состоянии нагрузки',
+                    category: 'Test', status: 'In Progress', priority: 'Medium'
+                },
+                {
+                    key: 6, title: 'Написать README.MD к этой задаче',
+                    category: 'Documentation', status: 'Done', priority: 'Low'
+                },
+                {
+                    key: 7, title: 'Добавить возможность удаления и создания заданий',
+                    category: 'Feature', status: 'Done', priority: 'High'
+                },
+                {
+                    key: 8, title: 'Перестроить архитектуру в соответствие с FSD',
+                    category: 'Feature', status: 'In Progress', priority: 'High'
+                },
+            ]
+            
+            lsTasks.forEach((t: Task) => {
+                dispatch(createTask({ newTask: t }))
+            })
+        }
     }, [])
 
     useEffect(() => {
         localStorage.setItem('myTasks', JSON.stringify(tasks))
     }, [tasks])
+
+    useEffect(() => {
+        localStorage.setItem('myFilterBy', JSON.stringify(getFilterBy))
+    }, [getFilterBy])
 
     return (
         <>
@@ -131,7 +138,7 @@ const ListPage: React.FC = () => {
                 <div className={styles['sortby-controls']}>
                     <Typography.Text>Фильтровать по: </Typography.Text>
 
-                    <Segmented value={getSortTasksBy} onChange={(v: FilterBy) => setSortTasksBy(v)}
+                    <Segmented value={getFilterBy} onChange={(v: FilterBy) => setFilterBy(v)}
                         options={[
                             { label: 'Статусу', value: 'status', icon: <BarsOutlined /> },
                             { label: 'Важности', value: 'priority', icon: <ExclamationCircleOutlined /> },
