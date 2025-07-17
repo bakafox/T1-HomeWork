@@ -17,13 +17,13 @@ const tasksSlice = createSlice({
         createTask(state,
             action: PayloadAction<{ newTask: Task }>
         ) {
-            console.log(state, action)
+            // console.log(state, action)
 
             if (!action.payload.newTask.title) return
 
             const newTaskId = (state.value.length > 0)
             ? state.value[state.value.length-1].key + 1
-            : 0
+            : 1 // С нуля обычные люди, в отличие от нас, не считают :)
 
             state.value.push({
                 ...action.payload.newTask,
@@ -34,7 +34,7 @@ const tasksSlice = createSlice({
         deleteTask(state,
             action: PayloadAction<{ taskId: number }>
         ) {
-            console.log(state, action)
+            // console.log(state, action)
 
             state.value = state.value.filter((t: Task) => (
                 t.key !== action.payload.taskId
@@ -44,7 +44,7 @@ const tasksSlice = createSlice({
         updateTask(state,
             action: PayloadAction<{ newTask: Task, taskId: number }>
         ) {
-            console.log(state, action)
+            // console.log(state, action)
 
             state.value = state.value.map((t: Task) => {
                 if (t.key === action.payload.taskId) {

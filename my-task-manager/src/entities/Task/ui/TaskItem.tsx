@@ -50,9 +50,9 @@ const TaskItem: React.FC<Props> = (props) => {
                 ${task.priority === 'High' ? styles.high
                 : task.priority === 'Low' ? styles.low : styles.medium}
             `} 
-            title={<>
+            title={<p className={styles['taskitem-title']}>
                 <Tag color={statusData.color}>{statusData.name}</Tag> {task.title}
-            </>}
+            </p>}
             extra={
                 <Typography.Text type='secondary'>#{task.key}</Typography.Text>
             }

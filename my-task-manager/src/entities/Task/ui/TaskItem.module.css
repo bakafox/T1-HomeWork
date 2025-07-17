@@ -11,12 +11,21 @@
         border-left-color: #d3adf7;
     }
 }
-.taskitem-text {
+
+.taskitem-title, .taskitem-text {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     line-clamp: 2; -webkit-line-clamp: 2;
-    margin: 0 0 8px;
+    white-space: wrap;
     overflow: hidden;
+    margin: 8px 0;
+
+    @media (width <= 640px) {
+        line-clamp: 3; -webkit-line-clamp: 3;
+    }
+}
+.taskitem-text {
+    margin-top: 0px;
 
     &.empty {
         display: none;
