@@ -3,11 +3,12 @@ import React from 'react'
 import { category } from '@entities/Task/model/types'
 import type { CheckboxGroupProps } from 'antd/es/checkbox'
 import type { Task } from '@entities/Task/model/types'
+import type { TaskStatus } from '../model/types'
 
 import { Card, Form, Input, Typography, Button, Radio } from 'antd'
 import {
     ExclamationCircleOutlined, SyncOutlined, CheckCircleOutlined,
-    FlagOutlined, SaveOutlined, CloseOutlined
+    FlagOutlined, SaveOutlined, CloseOutlined, DeleteOutlined
 } from '@ant-design/icons'
 
 const priorityOptions: CheckboxGroupProps<string>['options'] = [
@@ -29,19 +30,16 @@ const categoryOptions: CheckboxGroupProps<string>['options'] = (
 type Props = {
     getTask: Task,
     setTask: (t: Task) => void
-    setFinished: (t: boolean) => void
+    setStatus: (s: TaskStatus) => void
 }
 
 const TaskForm: React.FC<Props> = (props) => {
-    const { getTask, setTask, setFinished } = props
+    const { getTask, setTask, setStatus } = props
     const [form] = Form.useForm()
 
-    const onCancel = (): void => {
-        setFinished(true)
-    }
     const onSubmit = (newTask: Task): void => {
         setTask({ ...newTask, key: getTask.key })
-        setFinished(true)
+        setStatus('saved')
     }
 
     return (
@@ -57,8 +55,12 @@ const TaskForm: React.FC<Props> = (props) => {
                 }
                 actions={[
                     <Form.Item className={styles['taskform-footer']}>
-                        <Button type="default" shape="round" icon={<CloseOutlined />}
-                            onClick={onCancel}>Отменить
+                        <Button danger shape="round" icon={<DeleteOutlined />}
+                            className={!getTask.key ? styles.hidden : ''}
+                            onClick={() => setStatus('deleted')}>Удалить
+                        </Button>
+                        <Button shape="round" icon={<CloseOutlined />}
+                            onClick={() => setStatus('cancelled')}>Отменить
                         </Button>
                         <Button type="primary" shape="round" icon={<SaveOutlined />}
                             htmlType='submit'>Сохранить

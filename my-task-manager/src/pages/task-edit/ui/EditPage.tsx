@@ -3,9 +3,10 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from "react-router"
 import type { Task } from '@entities/Task/model/types'
+import type { TaskStatus } from '@widgets/task-form/model/types'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { updateTask } from '@entities/Task/model/tasksSlice'
+import { deleteTask, updateTask } from '@entities/Task/model/tasksSlice'
 import type { RootState } from '@app/store'
 
 import { Typography } from 'antd'
@@ -23,7 +24,7 @@ const TaskEditPage: React.FC = () => {
     const taskId = +(params?.id || -1)
 
     const [getTaskNotFound, setTaskNotFound] = useState<boolean>(false)
-    const [getTaskSaved, setTaskSaved] = useState<boolean>(false)
+    const [getTaskStatus, setTaskStatus] = useState<TaskStatus>('editing')
 
     const [getNewTask, setNewTask] = useState<Task>((): Task => {
         const currTask = tasks.filter((t: Task) => t.key === taskId)
@@ -41,11 +42,18 @@ const TaskEditPage: React.FC = () => {
     }, [getTaskNotFound])
 
     useEffect(() => {
-        if (getTaskSaved) {
+        if (getTaskStatus === 'saved') {
             dispatch(updateTask({ taskId: taskId, newTask: getNewTask }))
             navigate('/')
         }
-    }, [getTaskSaved])    
+        else if (getTaskStatus === 'deleted') {
+            dispatch(deleteTask({ taskId: taskId }))
+            navigate('/')
+        }
+        else if (getTaskStatus === 'cancelled') {
+            navigate('/')
+        }
+    }, [getTaskStatus])    
 
     return (
         <>
@@ -54,8 +62,8 @@ const TaskEditPage: React.FC = () => {
             </header>
 
             {/* Почему в React нет v-if v-else как во Vue? Неудобно >_< */}
-            <main className={(getTaskNotFound || getTaskSaved) ? styles.hidden : ''}>
-                <TaskForm getTask={getNewTask} setTask={setNewTask} setFinished={setTaskSaved} />
+            <main className={(getTaskNotFound || getTaskStatus !== 'editing') ? styles.hidden : ''}>
+                <TaskForm getTask={getNewTask} setTask={setNewTask} setStatus={setTaskStatus} />
             </main>
 
             <main className={getTaskNotFound ? '' : styles.hidden}>
@@ -64,7 +72,7 @@ const TaskEditPage: React.FC = () => {
                 </Typography.Title>
             </main>
 
-            <main className={getTaskSaved ? '' : styles.hidden}>
+            <main className={getTaskStatus === 'saved' ? '' : styles.hidden}>
                 <Typography.Title level={4} type='success'>
                     <CheckCircleOutlined /> Изменения сохранены!
                 </Typography.Title>

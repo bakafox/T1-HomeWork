@@ -3,6 +3,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router"
 import type { Task } from '@entities/Task/model/types'
+import type { TaskStatus } from '@widgets/task-form/model/types'
 
 import { useDispatch } from 'react-redux'
 import { createTask } from '@entities/Task/model/tasksSlice'
@@ -15,18 +16,21 @@ const TaskNewPage: React.FC = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const [getTaskSaved, setTaskSaved] = useState<boolean>(false)
+    const [getTaskStatus, setTaskStatus] = useState<TaskStatus>('editing')
 
     // key теперь будем назначать внутри Action-а createTask
     const newTask = {} as Task
     const [getNewTask, setNewTask] = useState<Task>(newTask)
 
     useEffect(() => {
-        if (getTaskSaved) {
+        if (getTaskStatus === 'saved') {
             dispatch(createTask({ newTask: getNewTask }))
             navigate('/')
         }
-    }, [getTaskSaved])
+        else if (getTaskStatus === 'cancelled') {
+            navigate('/')
+        }
+    }, [getTaskStatus])
 
     return (
         <>
@@ -34,11 +38,11 @@ const TaskNewPage: React.FC = () => {
                 <Typography.Title level={2}><i>Новая задача</i></Typography.Title>
             </header>
 
-            <main className={getTaskSaved ? styles.hidden : ''}>
-                <TaskForm getTask={getNewTask} setTask={setNewTask} setFinished={setTaskSaved} />
+            <main className={getTaskStatus !== 'editing' ? styles.hidden : ''}>
+                <TaskForm getTask={getNewTask} setTask={setNewTask} setStatus={setTaskStatus} />
             </main>
 
-            <main className={getTaskSaved ? '' : styles.hidden}>
+            <main className={getTaskStatus === 'saved' ? '' : styles.hidden}>
                 <Typography.Title level={4} type='success'>
                     <CheckCircleOutlined /> Изменения сохранены!
                 </Typography.Title>

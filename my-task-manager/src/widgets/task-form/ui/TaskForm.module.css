@@ -82,3 +82,7 @@
         border-color: #b7eb8f !important;
     }
 }
+
+.hidden {
+    display: none;
+}

@@ -11,9 +11,12 @@
         border-left-color: #d3adf7;
     }
 }
-
 .taskitem-text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    line-clamp: 2; -webkit-line-clamp: 2;
     margin: 0 0 8px;
+    overflow: hidden;
 
     &.empty {
         display: none;
@@ -25,12 +28,16 @@
     justify-content: space-between; align-items: baseline;
 }
 .taskitem-footer__actions {
-    display: flex; gap: 8px;
+    display: flex; flex-direction: row;
+    gap: 8px;
     opacity: 0;
-    transition: opacity .3s;    
+    transition: opacity .3s; 
 
-    .taskitem:hover &,
-    &:focus-within {
+    .taskitem:hover &, &:focus-within {
         opacity: 1;
+    }
+
+    @media (pointer:none), (pointer:coarse) {
+        display: none; /* Не показываем на мобилках вообще! */
     }
 }
