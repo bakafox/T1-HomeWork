@@ -1,39 +1,40 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 import type { Task } from '@entities/Task/model/types'
 
+import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
+
 interface TasksState {
-    value: Task[]
+    value: Task[],
 }
-const initialState: TasksState = {
-    value: []
+const tasksInitialState: TasksState = {
+    value: [],
 }
 
 const tasksSlice = createSlice({
     name: 'tasks',
 
-    initialState: initialState,
+    initialState: tasksInitialState,
 
     reducers: {
-        createTask(state,
-            action: PayloadAction<{ newTask: Task }>
-        ) {
+        createTask(state, action: PayloadAction<{ newTask: Task }>) {
             // console.log(state, action)
 
-            if (!action.payload.newTask.title) return
+            if (!action.payload.newTask.title)
+                return
 
-            const newTaskId = (state.value.length > 0)
-            ? state.value[state.value.length-1].key + 1
-            : 1 // С нуля обычные люди, в отличие от нас, не считают :)
+            const newTaskId = (action.payload.newTask.key)
+                ? action.payload.newTask.key
+                : (state.value.length > 0)
+                        ? state.value[state.value.length - 1].key + 1
+                        : 1 // С нуля обычные люди, в отличие от нас, не считают :)
 
             state.value.push({
                 ...action.payload.newTask,
-                key: newTaskId
+                key: newTaskId,
             })
         },
 
-        deleteTask(state,
-            action: PayloadAction<{ taskId: number }>
-        ) {
+        deleteTask(state, action: PayloadAction<{ taskId: number }>) {
             // console.log(state, action)
 
             state.value = state.value.filter((t: Task) => (
@@ -41,9 +42,7 @@ const tasksSlice = createSlice({
             ))
         },
 
-        updateTask(state,
-            action: PayloadAction<{ newTask: Task, taskId: number }>
-        ) {
+        updateTask(state, action: PayloadAction<{ newTask: Task, taskId: number }>) {
             // console.log(state, action)
 
             state.value = state.value.map((t: Task) => {
@@ -52,12 +51,14 @@ const tasksSlice = createSlice({
                 }
                 return t
             })
-        }
-    }
+        },
+    },
 })
 
 export const {
-    createTask, deleteTask, updateTask
+    createTask,
+    deleteTask,
+    updateTask,
 } = tasksSlice.actions
 
 export default tasksSlice.reducer

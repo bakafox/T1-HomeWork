@@ -1,0 +1,324 @@
+type: collection.insomnia.rest/5.0
+name: t1-backend-api
+meta:
+  id: wrk_1a26c3d8001a491eb08642121d0ff056
+  created: 1752949926799
+  modified: 1752949926799
+  description: ""
+collection:
+  - url: "{{ _.url }}/tasks"
+    name: Получение всех задач
+    meta:
+      id: req_541f42d4a3284998821582b2e4ec97c3
+      created: 1752949946002
+      modified: 1752951620678
+      isPrivate: false
+      description: ""
+      sortKey: -1752949955805
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.3.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.url }}/tasks/2"
+    name: Получение задачи по ID
+    meta:
+      id: req_0bbab1a694a74b03a92161dfc6f7d5f7
+      created: 1752949955705
+      modified: 1752961738685
+      isPrivate: false
+      description: ""
+      sortKey: -1752949955755
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.3.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.url }}/tasks/kolbasa"
+    name: Получение задачи по ID (invalid)
+    meta:
+      id: req_dac495c2ce5243e5b422ce13df3e9b37
+      created: 1752949992230
+      modified: 1752951466155
+      isPrivate: false
+      description: ""
+      sortKey: -1752949950853.5
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.3.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.url }}/tasks/3"
+    name: Удаление задачи по ID
+    meta:
+      id: req_c12bb466767e49308e83c209789cede1
+      created: 1752950001533
+      modified: 1752961932729
+      isPrivate: false
+      description: ""
+      sortKey: -1752949950753.5
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/11.3.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.url }}/tasks/pomidor"
+    name: Удаление задачи по ID (invalid)
+    meta:
+      id: req_936bdbb423094125a5e887f3ffeaf909
+      created: 1752950021622
+      modified: 1752951527070
+      isPrivate: false
+      description: ""
+      sortKey: -1752949899851.25
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/11.3.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.url }}/tasks/4"
+    name: Обновление задачи по ID
+    meta:
+      id: req_36086f274a56422ab5e38fdbd79dcee9
+      created: 1752950035946
+      modified: 1752961649125
+      isPrivate: false
+      description: ""
+      sortKey: -1752949899751.25
+    method: PATCH
+    body:
+      mimeType: application/json
+      text: >-
+        {
+                "id": 666,
+                "title": "При редактировании задачи должны использоваться только некоторые из переданных полей!",
+        		"description": "К таким полям относятся заголовок (title), описание (description) и параметры category, status, priority.",
+                "category": "Refactor",
+                "status": "Done",
+                "priority": "High",
+        		"hasCheese": true
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.3.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.url }}/tasks/5"
+    name: Обновление задачи по ID (partial)
+    meta:
+      id: req_bff4c2e72d1646e8941f1d43ceeb35c7
+      created: 1752950068038
+      modified: 1752961876607
+      isPrivate: false
+      description: ""
+      sortKey: -1752949874350.125
+    method: PATCH
+    body:
+      mimeType: application/json
+      text: >-
+        {
+                "title": "На самом деле на клиенте такой ситуации не может возникнуть, но в CRUD-ах PATCH должен уметь и такое!",
+        		"category": "Refactor",
+                "status": "Done",
+                "priority": "High"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.3.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.url }}/tasks/6"
+    name: Обновление задачи по ID (invalid 1)
+    meta:
+      id: req_3cb071dba82743f08c06ac3dc1738745
+      created: 1752950080974
+      modified: 1752962008666
+      isPrivate: false
+      description: ""
+      sortKey: -1752949861649.5625
+    method: PATCH
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        		"category": "amogus",
+                "status": "amogus",
+                "priority": "amogus"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.3.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.url }}/tasks"
+    name: Создание новой задачи
+    meta:
+      id: req_8a608e9e8dc84251b8fabb5b5fe19939
+      created: 1752950197585
+      modified: 1752962056178
+      isPrivate: false
+      description: ""
+      sortKey: -1752949861549.5625
+    method: POST
+    body:
+      mimeType: application/json
+      text: >-
+        {
+                "id": 666,
+                "title": "При создании задачи должны использоваться только некоторые из переданных полей!",
+        		"description": "К таким полям относятся заголовок (title), описание (description) и параметры category, status, priority.",
+                "category": "Refactor",
+                "status": "Done",
+                "priority": "High",
+        		"iUsedThisJsonBefore": true
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.3.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.url }}/tasks"
+    name: Создание новой задачи (invalid)
+    meta:
+      id: req_91264b5bd85c4d6e91aa66001ac00cb0
+      created: 1752950215428
+      modified: 1752951643116
+      isPrivate: false
+      description: ""
+      sortKey: -1752949855249.2812
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/11.3.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.url }}/tasks/chebupeli"
+    name: Обновление задачи по ID (invalid 2)
+    meta:
+      id: req_0c0a234d1c67442aad877b28d895de4c
+      created: 1752956389786
+      modified: 1752956389786
+      isPrivate: false
+      description: ""
+      sortKey: -1752949861599.5625
+    method: PATCH
+    headers:
+      - name: User-Agent
+        value: insomnia/11.3.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.url }}/abrakadabra"
+    name: Неверный запрос к API
+    meta:
+      id: req_dc32a24e52764ad890ae811727bd2a13
+      created: 1752956428426
+      modified: 1752956639541
+      isPrivate: false
+      description: ""
+      sortKey: -1752949955905
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.3.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_f6d59431c3e768033704065d36bc9fc92e23fd90
+    created: 1752949926805
+    modified: 1752949926805
+environments:
+  name: Base Environment
+  meta:
+    id: env_f6d59431c3e768033704065d36bc9fc92e23fd90
+    created: 1752949926802
+    modified: 1752951059353
+    isPrivate: false
+  data:
+    url: http://localhost:3000

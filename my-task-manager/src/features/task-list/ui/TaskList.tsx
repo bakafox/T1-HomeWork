@@ -1,23 +1,21 @@
-import styles from './TaskList.module.css'
-import React from 'react'
-import { useNavigate } from "react-router"
 import type { Task } from '@entities/Task/model/types'
-
-import { useDispatch } from 'react-redux'
 import { deleteTask } from '@entities/Task/model/tasksSlice'
-
 import TaskItem from '@entities/Task/ui/TaskItem'
-import { Typography, Divider } from 'antd'
 
+import { Divider, Typography } from 'antd'
+import React from 'react'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router'
+import styles from './TaskList.module.css'
 
-type Props = {
+interface Props {
     listName: string,
-    tasks: Task[]
+    tasks: Task[],
 }
 
 const TaskList: React.FC<Props> = (props) => {
     const { listName, tasks } = props
-    
+
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -26,9 +24,11 @@ const TaskList: React.FC<Props> = (props) => {
             <Divider orientation="left" orientationMargin="0" className={styles.divider}>
                 <Typography.Title level={4}>{`${listName}: ${tasks.length} зад.`}</Typography.Title>
             </Divider>
-            
-            {tasks.map((t) => (
-                <TaskItem task={t} key={t.key}
+
+            {tasks.map(t => (
+                <TaskItem
+                    task={t}
+                    key={t.key}
                     onEdit={() => navigate(`/task/${t.key}`)}
                     onDelete={() => dispatch(deleteTask({ taskId: t.key }))}
                 />

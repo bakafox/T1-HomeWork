@@ -1,16 +1,14 @@
-import styles from './NewPage.module.css'
-import React from 'react'
-import { useState, useEffect } from 'react'
-import { useNavigate } from "react-router"
 import type { Task } from '@entities/Task/model/types'
 import type { TaskStatus } from '@widgets/task-form/model/types'
-
-import { useDispatch } from 'react-redux'
+import { CheckCircleOutlined } from '@ant-design/icons'
 import { createTask } from '@entities/Task/model/tasksSlice'
+import TaskForm from '@widgets/task-form/ui/TaskForm'
 
 import { Typography } from 'antd'
-import { CheckCircleOutlined } from '@ant-design/icons'
-import TaskForm from '@widgets/task-form/ui/TaskForm'
+import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router'
+import styles from './NewPage.module.css'
 
 const TaskNewPage: React.FC = () => {
     const navigate = useNavigate()
@@ -43,7 +41,7 @@ const TaskNewPage: React.FC = () => {
             </main>
 
             <main className={getTaskStatus === 'saved' ? '' : styles.hidden}>
-                <Typography.Title level={4} type='success'>
+                <Typography.Title level={4} type="success">
                     <CheckCircleOutlined /> Изменения сохранены!
                 </Typography.Title>
             </main>

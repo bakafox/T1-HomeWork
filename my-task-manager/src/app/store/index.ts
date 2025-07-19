@@ -1,11 +1,11 @@
-import { configureStore } from "@reduxjs/toolkit"
-
 import tasksReducer from '@entities/Task/model/tasksSlice'
+
+import { configureStore } from '@reduxjs/toolkit'
 
 export const store = configureStore({
     reducer: {
         tasks: tasksReducer,
-    }
+    },
 })
 
 // Чтобы компилятор не ругался

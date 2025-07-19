@@ -1,17 +1,15 @@
-import styles from './EditPage.module.css'
-import React from 'react'
-import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from "react-router"
+import type { RootState } from '@app/store'
 import type { Task } from '@entities/Task/model/types'
 import type { TaskStatus } from '@widgets/task-form/model/types'
-
-import { useDispatch, useSelector } from 'react-redux'
+import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { deleteTask, updateTask } from '@entities/Task/model/tasksSlice'
-import type { RootState } from '@app/store'
+import TaskForm from '@widgets/task-form/ui/TaskForm'
 
 import { Typography } from 'antd'
-import { ExclamationCircleOutlined, CheckCircleOutlined } from '@ant-design/icons'
-import TaskForm from '@widgets/task-form/ui/TaskForm'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate, useParams } from 'react-router'
+import styles from './EditPage.module.css'
 
 const TaskEditPage: React.FC = () => {
     const params = useParams()
@@ -19,7 +17,7 @@ const TaskEditPage: React.FC = () => {
     const dispatch = useDispatch()
 
     const tasks = useSelector(
-        (state: RootState) => state.tasks.value
+        (state: RootState) => state.tasks.value,
     )
     const taskId = +(params?.id || -1)
 
@@ -38,22 +36,23 @@ const TaskEditPage: React.FC = () => {
     })
 
     useEffect(() => {
-        if (getTaskNotFound) navigate('/')
+        if (getTaskNotFound)
+            navigate('/')
     }, [getTaskNotFound])
 
     useEffect(() => {
         if (getTaskStatus === 'saved') {
-            dispatch(updateTask({ taskId: taskId, newTask: getNewTask }))
+            dispatch(updateTask({ taskId, newTask: getNewTask }))
             navigate('/')
         }
         else if (getTaskStatus === 'deleted') {
-            dispatch(deleteTask({ taskId: taskId }))
+            dispatch(deleteTask({ taskId }))
             navigate('/')
         }
         else if (getTaskStatus === 'cancelled') {
             navigate('/')
         }
-    }, [getTaskStatus])    
+    }, [getTaskStatus])
 
     return (
         <>
@@ -67,13 +66,13 @@ const TaskEditPage: React.FC = () => {
             </main>
 
             <main className={getTaskNotFound ? '' : styles.hidden}>
-                <Typography.Title level={4} type='danger'>
+                <Typography.Title level={4} type="danger">
                     <ExclamationCircleOutlined /> Задача не найдена!
                 </Typography.Title>
             </main>
 
             <main className={getTaskStatus === 'saved' ? '' : styles.hidden}>
-                <Typography.Title level={4} type='success'>
+                <Typography.Title level={4} type="success">
                     <CheckCircleOutlined /> Изменения сохранены!
                 </Typography.Title>
             </main>

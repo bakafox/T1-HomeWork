@@ -1,41 +1,39 @@
-import styles from './TaskItem.module.css'
-import React, { type ReactNode } from 'react'
 import type { Task } from '@entities/Task/model/types'
 
-import { Card, Tag, Typography, Button } from 'antd'
-import {
-    ExclamationCircleOutlined, SyncOutlined, CheckCircleOutlined,
-    EditOutlined, DeleteOutlined
-} from '@ant-design/icons'
+import type { ReactNode } from 'react'
+import { CheckCircleOutlined, DeleteOutlined, EditOutlined, ExclamationCircleOutlined, SyncOutlined } from '@ant-design/icons'
+import { Button, Card, Tag, Typography } from 'antd'
+import React from 'react'
+import styles from './TaskItem.module.css'
 
-const getStatusData = (status: string): { name: ReactNode, color: string } => {
+function getStatusData(status: string): { name: ReactNode, color: string } {
     switch (status) {
         case 'To Do':
             return {
                 name: <><ExclamationCircleOutlined /> К выполнению</>,
-                color: 'magenta'
+                color: 'magenta',
             }
         case 'In Progress':
             return {
                 name: <><SyncOutlined /> В процессе…</>,
-                color: 'gold'
+                color: 'gold',
             }
         case 'Done':
             return {
                 name: <><CheckCircleOutlined /> Дело сделано!</>,
-                color: 'green'
+                color: 'green',
             }
         default:
             return {
                 name: <><ExclamationCircleOutlined /> Неизвестно</>,
-                color: 'cyan'
+                color: 'cyan',
             }
     }
 }
 
-type Props = {
-    task: Task,
-    onEdit: () => void,
+interface Props {
+    task: Task
+    onEdit: () => void
     onDelete: () => void
 }
 
@@ -44,19 +42,27 @@ const TaskItem: React.FC<Props> = (props) => {
     const statusData = getStatusData(task.status)
 
     return (
-        <Card tabIndex={0} aria-description={`${task.title} — ${task.description}`}
+        <Card
+            tabIndex={0}
+            aria-description={`${task.title} — ${task.description}`}
             className={`
                 ${styles.taskitem}
-                ${task.priority === 'High' ? styles.high
-                : task.priority === 'Low' ? styles.low : styles.medium}
-            `} 
-            title={<p className={styles['taskitem-title']}>
-                <Tag color={statusData.color}>{statusData.name}</Tag> {task.title}
-            </p>}
+                ${task.priority === 'High'
+                    ? styles.high
+                    : task.priority === 'Low' ? styles.low : styles.medium
+                }
+            `}
+            title={(
+                <p className={styles['taskitem-title']}>
+                    <Tag color={statusData.color}>{statusData.name}</Tag> {task.title}
+                </p>
+            )}
             extra={
-                <Typography.Text type='secondary'>#{task.key}</Typography.Text>
+                <Typography.Text type="secondary">#{task.key}</Typography.Text>
             }
-            size='small' hoverable={true} onClick={onEdit}
+            size="small"
+            hoverable={true}
+            onClick={onEdit}
         >
             <p className={`
                 ${styles['taskitem-text']}
@@ -67,18 +73,27 @@ const TaskItem: React.FC<Props> = (props) => {
 
             <footer className={styles['taskitem-footer']}>
                 <span>
-                    <Typography.Text type='secondary'>Категория: </Typography.Text>
+                    <Typography.Text type="secondary">Категория: </Typography.Text>
                     <Tag>{task.category}</Tag>
                 </span>
                 <span className={styles['taskitem-footer__actions']}>
-                    <Button shape="round" icon={<EditOutlined />}
+                    <Button
+                        shape="round"
+                        icon={<EditOutlined />}
                         onClick={(e) => { e.stopPropagation(); onEdit() }}
-                        title='Изменить' aria-label='Кнопка изменения задачи'
-                    >Изменить</Button>
-                    <Button danger shape="circle" icon={<DeleteOutlined />}
+                        title="Изменить"
+                        aria-label="Кнопка изменения задачи"
+                    >
+                        Изменить
+                    </Button>
+                    <Button
+                        danger
+                        shape="circle"
+                        icon={<DeleteOutlined />}
                         onClick={(e) => { e.stopPropagation(); onDelete() }}
-                        title='Удалить' aria-label='Кнопка удаления задачи'
-                    ></Button>
+                        title="Удалить"
+                        aria-label="Кнопка удаления задачи"
+                    />
                 </span>
             </footer>
         </Card>
