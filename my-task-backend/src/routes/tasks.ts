@@ -42,7 +42,7 @@ const validateTask = [
 const validateTaskId = [
     param('id').custom(
         (i: string) => tasks.getTaskIds().includes(Number.parseInt(i)),
-    ).withMessage('Неверный идентификатор задачи!'),
+    ).withMessage('Идентификатор задачи указан неверно, либо этой задачи не сущесвует!'),
 ]
 
 // Get /tasks получение всех задач
@@ -62,7 +62,7 @@ router.get('/', [], (req: Request, res: Response): Response<Task[]> => {
 router.get('/:id', validateTaskId, (req: Request, res: Response): Response<Task> => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() })
+        return res.status(404).json({ errors: errors.array() })
     }
 
     const task = tasks.getTasks().find(
@@ -76,7 +76,7 @@ router.get('/:id', validateTaskId, (req: Request, res: Response): Response<Task>
 router.delete('/:id', validateTaskId, (req: Request, res: Response): Response<Task> => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() })
+        return res.status(404).json({ errors: errors.array() })
     }
 
     const index = tasks.getTaskIds().findIndex(
@@ -84,7 +84,7 @@ router.delete('/:id', validateTaskId, (req: Request, res: Response): Response<Ta
     )
 
     const newTasks = tasks.getTasks()
-    const deletedTask = newTasks.splice(index, 1)
+    const deletedTask = newTasks.splice(index, 1)[0]
 
     tasks.setTasks(newTasks)
     return res.status(200).send(deletedTask)

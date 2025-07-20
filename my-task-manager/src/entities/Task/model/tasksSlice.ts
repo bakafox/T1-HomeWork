@@ -55,7 +55,9 @@ const deleteTask = createAsyncThunk(
     ): Promise<Task> => {
         const json = await fetch(
             `${API_ROOT}/${taskId}`,
-            { method: 'DELETE' },
+            {
+                method: 'DELETE'
+            },
         )
 
         if (!json.ok) {
@@ -76,7 +78,11 @@ const updateTask = createAsyncThunk(
     ): Promise<Task> => {
         const json = await fetch(
             `${API_ROOT}/${taskId}`,
-            { method: 'PATCH', body: JSON.stringify(task) },
+            {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(task)
+            },
         )
 
         if (!json.ok) {
@@ -97,7 +103,11 @@ const createTask = createAsyncThunk(
     ): Promise<Task> => {
         const json = await fetch(
             `${API_ROOT}`,
-            { method: 'POST', body: JSON.stringify(task) },
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(task)
+            },
         )
 
         if (!json.ok) {
@@ -130,14 +140,17 @@ const tasksSlice = createSlice({
     extraReducers(builder) {
         builder
             .addCase(getTasks.fulfilled, (state, action) => {
+                console.log(state, action)
                 state.value = action.payload
             })
             .addCase(deleteTask.fulfilled, (state, action) => {
-                state.value = state.value.filter((t: Task) =>
-                    t.id !== action.payload.id
+                console.log(state, action)
+                state.value = state.value.filter(
+                    (t: Task) => t.id !== action.payload.id,
                 )
             })
             .addCase(updateTask.fulfilled, (state, action) => {
+                console.log(state, action)
                 state.value = state.value.map((t: Task) => {
                     if (t.id === action.payload.id) {
                         return action.payload
@@ -146,6 +159,7 @@ const tasksSlice = createSlice({
                 })
             })
             .addCase(createTask.fulfilled, (state, action) => {
+                console.log(state, action)
                 state.value.push(action.payload)
             })
     },

@@ -19,7 +19,7 @@ const App: React.FC = () => {
 
     // Не самое элегантное решение, но... работает жи...
     useEffect(() => {
-        if (tasks.length <= 0) {
+        if (!getInitLoadFinished) {
             // const lsTasksJson: string | null = localStorage.getItem('myTasks')
             // const lsTasks: Task[] = lsTasksJson
             //     ? JSON.parse(lsTasksJson)
@@ -38,10 +38,9 @@ const App: React.FC = () => {
         localStorage.setItem('myTasks', JSON.stringify(tasks))
     }, [tasks])
 
-    // Иначе будет ошибка потому что задач нету но они кагбе есть
-    if (!getInitLoadFinished) {
-        return <></>
-    }
+    // if (!getInitLoadFinished) {
+    //     return <></>
+    // }
 
     return (
         <Routes>

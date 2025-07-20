@@ -91,7 +91,10 @@ const TaskForm: React.FC<Props> = (props) => {
                         />
                     </Form.Item>
 
-                    <Form.Item name="priority" rules={[{ required: true, message: 'Выберите приоритет задачи' }]}>
+                    {/* Обёртка в span нужна, потому что таково требование Ant Design:
+                    `Form.Item` with a `name` prop must have a single child element. */}
+
+                    <Form.Item name="priority" rules={[{ required: true, message: 'Выберите приоритет задачи' }]}><span>
                         <Typography.Text type="secondary">
                             Важность задачи:
                         </Typography.Text>
@@ -101,9 +104,9 @@ const TaskForm: React.FC<Props> = (props) => {
                             options={priorityOptions}
                             defaultValue={getTask.priority}
                         />
-                    </Form.Item>
+                    </span></Form.Item>
 
-                    <Form.Item name="status" rules={[{ required: true, message: 'Выберите статус задачи' }]}>
+                    <Form.Item name="status" rules={[{ required: true, message: 'Выберите статус задачи' }]}><span>
                         <Typography.Text type="secondary">
                             Статус выполнения задачи:
                         </Typography.Text>
@@ -113,9 +116,9 @@ const TaskForm: React.FC<Props> = (props) => {
                             options={statusOptions}
                             defaultValue={getTask.status}
                         />
-                    </Form.Item>
+                    </span></Form.Item>
 
-                    <Form.Item name="category" rules={[{ required: true, message: 'Выберите категорию задачи' }]}>
+                    <Form.Item name="category" rules={[{ required: true, message: 'Выберите категорию задачи' }]}><span>
                         <Typography.Text type="secondary">
                             Категория задачи:
                         </Typography.Text>
@@ -125,7 +128,7 @@ const TaskForm: React.FC<Props> = (props) => {
                             options={categoryOptions}
                             defaultValue={getTask.category}
                         />
-                    </Form.Item>
+                    </span></Form.Item>
                 </div>
             </Card>
         </Form>

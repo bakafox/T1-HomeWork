@@ -70,7 +70,7 @@
         "title": "Реализовать простой бэкенд на Express + Node.js",
         "description": "Данные реально хранить необязательно, достаточно просто загружать моковые при запуске сервера, а изменённые данные записывать вообще не надо :)",
         "category": "Feature",
-        "status": "In Progress",
+        "status": "Done",
         "priority": "High"
     },
     {
@@ -78,7 +78,7 @@
         "title": "Выполнить связывание фронтенда и бэкенда",
         "description": "Самая сложна часть уже позади… или всё-таки нет?",
         "category": "Feature",
-        "status": "In Progress",
+        "status": "Done",
         "priority": "High"
     },
     {

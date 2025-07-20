@@ -1,14 +1,17 @@
+import type { AppDispatch } from '@app/store'
+import { getTasks } from '@entities/Task/model/tasksSlice'
 import styles from './ListPage.module.css'
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { category, status, priority } from '@entities/Task/model/types'
-import { useNavigate } from "react-router";
+import { useNavigate } from 'react-router'
+import { useDispatch } from 'react-redux'
 import type { Task } from '@entities/Task/model/types'
 
 import { useSelector } from 'react-redux'
 import type { RootState } from '@app/store'
 
-import { Typography, Divider, Segmented, Button } from 'antd'
+import { Typography, Divider, Segmented, Button, Input } from 'antd'
 import { AppstoreOutlined, BarsOutlined, ExclamationCircleOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import TaskList from '@features/task-list/ui/TaskList'
 
@@ -20,6 +23,7 @@ const ListPage: React.FC = () => {
     )
 
     const navigate = useNavigate()
+    const dispatch: AppDispatch = useDispatch()
 
     // Пусть у нас таски сортируются либо по категориям,
     // либо по статусу выполнения, либо по приоритету:
@@ -27,6 +31,8 @@ const ListPage: React.FC = () => {
         const lsFilterByJson: string | null = localStorage.getItem("myFilterBy")
         return lsFilterByJson ? JSON.parse(lsFilterByJson) : 'status'
     })
+
+    const [getQuery, setQuery] = useState<string>('')
 
     // const sortedTasks = (
     //     (getFilterBy === 'status') ? [...tasks].sort((t1, t2) => {
@@ -94,6 +100,12 @@ const ListPage: React.FC = () => {
             </Divider>
 
             <main className={styles.tasklists}>
+                <Input.Search className={styles.search} variant='filled' placeholder='Поиск по тексту задач'
+                    value={getQuery} onChange={(e) => setQuery(e.target.value)}
+                    onSearch={() => dispatch(getTasks({ query: getQuery }))}
+                    onBlur={() => dispatch(getTasks({ query: getQuery }))}
+                />
+
                 <Button type="dashed" className={styles['add-btn']} onClick={() => navigate('/task/new')}>
                     <PlusCircleOutlined /> Новая задача
                 </Button>
