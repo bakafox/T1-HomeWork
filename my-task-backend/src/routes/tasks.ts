@@ -1,15 +1,16 @@
 import type { Request, Response } from 'express'
 import type { Task } from '../models/task'
-import { readFileSync } from 'fs'
+import { readFileSync } from 'node:fs'
 import { Router } from 'express'
-import { body, param, validationResult } from 'express-validator'
 import { category, priority, status } from '../models/task'
+// eslint-disable-next-line ts/no-require-imports, perfectionist/sort-imports
+const { body, param, validationResult } = require('express-validator')
 
 const router = Router()
 
 class Tasks {
-    private tasks: Task[]
-    private taskIds: number[]
+    private tasks: Task[] = []
+    private taskIds: number[] = []
 
     constructor(tasks: Task[]) {
         this.setTasks(tasks)
@@ -29,7 +30,7 @@ class Tasks {
     }
 }
 
-const initialTasks = readFileSync(__dirname + '/../initialTasks.json')
+const initialTasks = readFileSync(`${__dirname}/../../initialTasks.json`)
 const tasks = new Tasks(JSON.parse(initialTasks.toString()) ?? [])
 // console.log(tasks)
 
@@ -40,8 +41,9 @@ const validateTask = [
     body('priority').notEmpty().isIn(priority).withMessage('Неверный приоритет задачи!'),
 ]
 const validateTaskId = [
-    param('id').custom(i => tasks.getTaskIds().includes(Number.parseInt(i)))
-        .withMessage('Неверный идентификатор задачи!'),
+    param('id').custom(
+        (i: string) => tasks.getTaskIds().includes(Number.parseInt(i)),
+    ).withMessage('Неверный идентификатор задачи!'),
 ]
 
 // Get /tasks получение всех задач
@@ -113,7 +115,7 @@ router.patch('/:id', [...validateTask, ...validateTaskId], (req: Request, res: R
 
     const newTask = tasks.getTasks().find(
         t => t.id === Number.parseInt(req.params.id),
-    )
+    ) as Task
     // console.log(newTask)
 
     newTask.title = req.body.title ?? newTask.title
@@ -122,8 +124,8 @@ router.patch('/:id', [...validateTask, ...validateTaskId], (req: Request, res: R
     newTask.priority = req.body.priority || newTask.priority
     newTask.status = req.body.status || newTask.status
 
-    const newTasks = tasks.getTasks().map(
-        t => t.id === newTask.id ? newTask : t,
+    const newTasks: Task[] = tasks.getTasks().map(
+        t => t.id === newTask!.id ? newTask : t,
     )
     tasks.setTasks(newTasks)
     res.status(200).json(newTask)
