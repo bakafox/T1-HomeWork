@@ -69,8 +69,24 @@
         "id": 11,
         "title": "Реализовать простой бэкенд на Express + Node.js",
         "description": "Данные реально хранить необязательно, достаточно просто загружать моковые при запуске сервера, а изменённые данные записывать вообще не надо :)",
-        "category": "Refactor",
+        "category": "Feature",
         "status": "In Progress",
-        "priority": "Low"
+        "priority": "High"
+    },
+    {
+        "id": 13,
+        "title": "Выполнить связывание фронтенда и бэкенда",
+        "description": "Самая сложна часть уже позади… или всё-таки нет?",
+        "category": "Feature",
+        "status": "In Progress",
+        "priority": "High"
+    },
+    {
+        "id": 14,
+        "title": "Поиск по названию задачи",
+        "description": "На стороне бэкенда всё уже реализовано, осталось лишь добавить функциональность на клиенте",
+        "category": "Feature",
+        "status": "In Progress",
+        "priority": "Medium"
     }
 ]

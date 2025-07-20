@@ -1,8 +1,118 @@
 import type { Task } from '@entities/Task/model/types'
 
-import type { PayloadAction } from '@reduxjs/toolkit'
-import { createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
+// eslint-disable-next-line prefer-template
+const API_ROOT = import.meta.env.VITE_API_ROOT + 'tasks'
+
+// https://redux-toolkit.js.org/api/createAsyncThunk
+// Сначала описываем Thunk-и (обёртки для fetch, я так понимаю)
+
+const getTasks = createAsyncThunk(
+    'tasks/getTasks', // <-- Не имя API эндпоинта, а имя для RTK!
+    async (
+        { query }: { query?: string },
+    ): Promise<Task[]> => {
+        const json = await fetch(
+            `${API_ROOT}?q=${query ?? ''}`,
+        )
+
+        if (!json.ok) {
+            console.error(json)
+            return [] as Task[]
+        }
+
+        const data: Task[] = await json.json()
+        // console.log('getTasks', json, data)
+        return data
+    },
+)
+
+// const getTask = createAsyncThunk(
+//     'tasks/getTask', // <-- Не имя API эндпоинта, а имя для RTK!
+//     async (
+//         { taskId }: { taskId: number },
+//     ): Promise<Task> => {
+//         const json = await fetch(
+//             `${API_ROOT}/${taskId}`,
+//         )
+
+//         if (!json.ok) {
+//             console.error(json)
+//             return {} as Task
+//         }
+
+//         const data: Task = await json.json()
+//         // console.log('getTask', json, data)
+//         return data
+//     },
+// )
+
+const deleteTask = createAsyncThunk(
+    'tasks/deleteTask', // <-- Не имя API эндпоинта, а имя для RTK!
+    async (
+        { taskId }: { taskId: number },
+    ): Promise<Task> => {
+        const json = await fetch(
+            `${API_ROOT}/${taskId}`,
+            { method: 'DELETE' },
+        )
+
+        if (!json.ok) {
+            console.error(json)
+            return {} as Task
+        }
+
+        const data: Task = await json.json()
+        // console.log('deleteTask', json, data)
+        return data
+    },
+)
+
+const updateTask = createAsyncThunk(
+    'tasks/updateTask', // <-- Не имя API эндпоинта, а имя для RTK!
+    async (
+        { taskId, task }: { taskId: number, task: Task },
+    ): Promise<Task> => {
+        const json = await fetch(
+            `${API_ROOT}/${taskId}`,
+            { method: 'PATCH', body: JSON.stringify(task) },
+        )
+
+        if (!json.ok) {
+            console.error(json)
+            return {} as Task
+        }
+
+        const data: Task = await json.json()
+        // console.log('updateTask', json, data)
+        return data
+    },
+)
+
+const createTask = createAsyncThunk(
+    'tasks/createTask', // <-- Не имя API эндпоинта, а имя для RTK!
+    async (
+        { task }: { task: Task },
+    ): Promise<Task> => {
+        const json = await fetch(
+            `${API_ROOT}`,
+            { method: 'POST', body: JSON.stringify(task) },
+        )
+
+        if (!json.ok) {
+            console.error(json)
+            return {} as Task
+        }
+
+        const data: Task = await json.json()
+        // console.log('createTask', json, data)
+        return data
+    },
+)
+
+// Теперь все наши Thunk-и оборачиваем в особые редюсеры, которые
+// можут иметь доступ к действия, произошедшим не внутри слайса
 interface TasksState {
     value: Task[],
 }
@@ -15,50 +125,42 @@ const tasksSlice = createSlice({
 
     initialState: tasksInitialState,
 
-    reducers: {
-        createTask(state, action: PayloadAction<{ newTask: Task }>) {
-            // console.log(state, action)
+    reducers: {},
 
-            if (!action.payload.newTask.title)
-                return
-
-            const newTaskId = (action.payload.newTask.key)
-                ? action.payload.newTask.key
-                : (state.value.length > 0)
-                        ? state.value[state.value.length - 1].key + 1
-                        : 1 // С нуля обычные люди, в отличие от нас, не считают :)
-
-            state.value.push({
-                ...action.payload.newTask,
-                key: newTaskId,
+    extraReducers(builder) {
+        builder
+            .addCase(getTasks.fulfilled, (state, action) => {
+                state.value = action.payload
             })
-        },
-
-        deleteTask(state, action: PayloadAction<{ taskId: number }>) {
-            // console.log(state, action)
-
-            state.value = state.value.filter((t: Task) => (
-                t.key !== action.payload.taskId
-            ))
-        },
-
-        updateTask(state, action: PayloadAction<{ newTask: Task, taskId: number }>) {
-            // console.log(state, action)
-
-            state.value = state.value.map((t: Task) => {
-                if (t.key === action.payload.taskId) {
-                    return action.payload.newTask
-                }
-                return t
+            .addCase(deleteTask.fulfilled, (state, action) => {
+                state.value = state.value.filter((t: Task) =>
+                    t.id !== action.payload.id
+                )
             })
-        },
+            .addCase(updateTask.fulfilled, (state, action) => {
+                state.value = state.value.map((t: Task) => {
+                    if (t.id === action.payload.id) {
+                        return action.payload
+                    }
+                    return t
+                })
+            })
+            .addCase(createTask.fulfilled, (state, action) => {
+                state.value.push(action.payload)
+            })
     },
 })
 
-export const {
-    createTask,
+// То есть логика в том, что мы вызываем сами внешние фукнции,
+// (которые тоже возвращают какие-то данные), а extra reducer
+// их наблюдает, и, когда они выполняются, делает определённые
+// действия со значенинем внутри слайса.
+export {
+    getTasks,
+    // getTask,
     deleteTask,
     updateTask,
-} = tasksSlice.actions
+    createTask,
+}
 
 export default tasksSlice.reducer

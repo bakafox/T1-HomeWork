@@ -32,7 +32,6 @@ class Tasks {
 
 const initialTasks = readFileSync(`${__dirname}/../../initialTasks.json`)
 const tasks = new Tasks(JSON.parse(initialTasks.toString()) ?? [])
-// console.log(tasks)
 
 const validateTask = [
     body('title').notEmpty().withMessage('Неверный заголовок задачи!'),
@@ -47,12 +46,20 @@ const validateTaskId = [
 ]
 
 // Get /tasks получение всех задач
-router.get('/', [], (req: Request, res: Response) => {
-    res.json(tasks.getTasks())
+router.get('/', [], (req: Request, res: Response): Response<Task[]> => {
+    if (!req.query.q) {
+        return res.status(200).json(tasks.getTasks())
+    }
+
+    const foundTasks = tasks.getTasks().filter(
+        (t: Task) => t.title.includes(req.query.q?.toString() || '')
+            || t.description?.includes(req.query.q?.toString() || ''),
+    )
+    return res.status(200).json(foundTasks)
 })
 
 // Get /tasks/:id получение задачи по ид
-router.get('/:id', validateTaskId, (req: Request, res: Response) => {
+router.get('/:id', validateTaskId, (req: Request, res: Response): Response<Task> => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() })
@@ -61,11 +68,56 @@ router.get('/:id', validateTaskId, (req: Request, res: Response) => {
     const task = tasks.getTasks().find(
         t => t.id === Number.parseInt(req.params.id),
     )
-    res.status(200).json(task)
+
+    return res.status(200).json(task)
+})
+
+// Delete /tasks/:id удаление
+router.delete('/:id', validateTaskId, (req: Request, res: Response): Response<Task> => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
+    }
+
+    const index = tasks.getTaskIds().findIndex(
+        i => i === Number.parseInt(req.params.id),
+    )
+
+    const newTasks = tasks.getTasks()
+    const deletedTask = newTasks.splice(index, 1)
+
+    tasks.setTasks(newTasks)
+    return res.status(200).send(deletedTask)
+})
+
+// Patch /tasks/:id обновление
+router.patch('/:id', [...validateTask, ...validateTaskId], (req: Request, res: Response): Response<Task> => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
+    }
+
+    const newTask = tasks.getTasks().find(
+        t => t.id === Number.parseInt(req.params.id),
+    ) as Task
+    // console.log(newTask)
+
+    newTask.title = req.body.title ?? newTask.title
+    newTask.description = req.body.description ?? newTask.description
+    newTask.category = req.body.category || newTask.category
+    newTask.priority = req.body.priority || newTask.priority
+    newTask.status = req.body.status || newTask.status
+
+    const newTasks: Task[] = tasks.getTasks().map(
+        t => t.id === newTask!.id ? newTask : t,
+    )
+
+    tasks.setTasks(newTasks)
+    return res.status(200).json(newTask)
 })
 
 // Post /tasks создание
-router.post('/', validateTask, (req: Request, res: Response) => {
+router.post('/', validateTask, (req: Request, res: Response): Response<Task> => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() })
@@ -86,49 +138,7 @@ router.post('/', validateTask, (req: Request, res: Response) => {
     }
 
     tasks.setTasks([...tasks.getTasks(), newTask])
-    res.status(201).json(newTask.id)
-})
-
-// Delete /tasks/:id удаление
-router.delete('/:id', validateTaskId, (req: Request, res: Response) => {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() })
-    }
-
-    const index = tasks.getTaskIds().findIndex(
-        i => i === Number.parseInt(req.params.id),
-    )
-
-    const newTasks = tasks.getTasks()
-    newTasks.splice(index, 1)
-    tasks.setTasks(newTasks)
-    res.status(200).send(req.params.id)
-})
-
-// Patch /tasks/:id обновление
-router.patch('/:id', [...validateTask, ...validateTaskId], (req: Request, res: Response) => {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() })
-    }
-
-    const newTask = tasks.getTasks().find(
-        t => t.id === Number.parseInt(req.params.id),
-    ) as Task
-    // console.log(newTask)
-
-    newTask.title = req.body.title ?? newTask.title
-    newTask.description = req.body.description ?? newTask.description
-    newTask.category = req.body.category || newTask.category
-    newTask.priority = req.body.priority || newTask.priority
-    newTask.status = req.body.status || newTask.status
-
-    const newTasks: Task[] = tasks.getTasks().map(
-        t => t.id === newTask!.id ? newTask : t,
-    )
-    tasks.setTasks(newTasks)
-    res.status(200).json(newTask)
+    return res.status(201).json(newTask)
 })
 
 export default router

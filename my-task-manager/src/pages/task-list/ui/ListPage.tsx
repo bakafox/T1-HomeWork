@@ -67,7 +67,6 @@ const ListPage: React.FC = () => {
     )
     // console.log(tasks, tasksByCat)
 
-
     useEffect(() => {
         localStorage.setItem('myFilterBy', JSON.stringify(getFilterBy))
     }, [getFilterBy])

@@ -39,7 +39,17 @@ interface Props {
 
 const TaskItem: React.FC<Props> = (props) => {
     const { task, onEdit, onDelete } = props
+
     const statusData = getStatusData(task.status)
+
+    const dateString = task.dateCreated
+        ? new Intl.DateTimeFormat('ru-RU', {
+                dateStyle: 'short',
+                timeStyle: 'medium',
+            }).format(
+                new Date(task.dateCreated),
+            )
+        : '' // <-- Дата создания не указана
 
     return (
         <Card
@@ -58,7 +68,7 @@ const TaskItem: React.FC<Props> = (props) => {
                 </p>
             )}
             extra={
-                <Typography.Text type="secondary">#{task.key}</Typography.Text>
+                <Typography.Text type="secondary">{dateString}</Typography.Text>
             }
             size="small"
             hoverable={true}

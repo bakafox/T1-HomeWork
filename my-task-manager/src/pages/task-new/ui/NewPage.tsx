@@ -1,3 +1,4 @@
+import type { AppDispatch } from '@app/store'
 import type { Task } from '@entities/Task/model/types'
 import type { TaskStatus } from '@widgets/task-form/model/types'
 import { CheckCircleOutlined } from '@ant-design/icons'
@@ -12,7 +13,7 @@ import styles from './NewPage.module.css'
 
 const TaskNewPage: React.FC = () => {
     const navigate = useNavigate()
-    const dispatch = useDispatch()
+    const dispatch: AppDispatch = useDispatch()
 
     const [getTaskStatus, setTaskStatus] = useState<TaskStatus>('editing')
 
@@ -22,7 +23,7 @@ const TaskNewPage: React.FC = () => {
 
     useEffect(() => {
         if (getTaskStatus === 'saved') {
-            dispatch(createTask({ newTask: getNewTask }))
+            dispatch(createTask({ task: getNewTask }))
             navigate('/')
         }
         else if (getTaskStatus === 'cancelled') {

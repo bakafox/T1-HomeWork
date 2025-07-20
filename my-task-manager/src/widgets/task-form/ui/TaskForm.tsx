@@ -35,7 +35,7 @@ const TaskForm: React.FC<Props> = (props) => {
     const [form] = Form.useForm()
 
     const onSubmit = (newTask: Task): void => {
-        setTask({ ...newTask, key: getTask.key })
+        setTask({ ...newTask, id: getTask.id })
         setStatus('saved')
     }
 
@@ -59,7 +59,7 @@ const TaskForm: React.FC<Props> = (props) => {
                             danger
                             shape="round"
                             icon={<DeleteOutlined />}
-                            className={!getTask.key ? styles.hidden : ''}
+                            className={!getTask.id ? styles.hidden : ''}
                             onClick={() => setStatus('deleted')}
                         >
                             Удалить

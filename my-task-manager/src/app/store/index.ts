@@ -8,5 +8,5 @@ export const store = configureStore({
     },
 })
 
-// Чтобы компилятор не ругался
 export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch

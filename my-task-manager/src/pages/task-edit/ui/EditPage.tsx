@@ -1,4 +1,4 @@
-import type { RootState } from '@app/store'
+import type { AppDispatch, RootState } from '@app/store'
 import type { Task } from '@entities/Task/model/types'
 import type { TaskStatus } from '@widgets/task-form/model/types'
 import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
@@ -14,7 +14,7 @@ import styles from './EditPage.module.css'
 const TaskEditPage: React.FC = () => {
     const params = useParams()
     const navigate = useNavigate()
-    const dispatch = useDispatch()
+    const dispatch: AppDispatch = useDispatch()
 
     const tasks = useSelector(
         (state: RootState) => state.tasks.value,
@@ -25,7 +25,7 @@ const TaskEditPage: React.FC = () => {
     const [getTaskStatus, setTaskStatus] = useState<TaskStatus>('editing')
 
     const [getNewTask, setNewTask] = useState<Task>((): Task => {
-        const currTask = tasks.filter((t: Task) => t.key === taskId)
+        const currTask = tasks.filter((t: Task) => t.id === taskId)
 
         if (currTask.length <= 0) {
             setTaskNotFound(true)
@@ -42,7 +42,7 @@ const TaskEditPage: React.FC = () => {
 
     useEffect(() => {
         if (getTaskStatus === 'saved') {
-            dispatch(updateTask({ taskId, newTask: getNewTask }))
+            dispatch(updateTask({ taskId, task: getNewTask }))
             navigate('/')
         }
         else if (getTaskStatus === 'deleted') {
